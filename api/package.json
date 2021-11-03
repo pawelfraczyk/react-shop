@@ -34,7 +34,7 @@
     "nodemailer": "^4.6.8",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
-    "validator": "^11.1.0",
+    "validator": "^13.7.0",
     "xml2js": "^0.4.19"
   }
 }
