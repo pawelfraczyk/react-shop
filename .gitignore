@@ -1,7 +1,7 @@
-**/node_modules
-**/build
+node_modules
+build
 .env
 
 # terraform
-**/.terraform
-**/*.tfvars
+.terraform
+*.tfvars
