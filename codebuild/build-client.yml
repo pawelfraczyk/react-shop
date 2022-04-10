@@ -24,4 +24,4 @@ phases:
       - ls $CODEBUILD_SRC_DIR/client/build
 artifacts:
   files:
-    - 'client/build/*'
+    - 'client/build/**/*'
