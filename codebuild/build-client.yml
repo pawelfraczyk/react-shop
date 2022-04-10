@@ -16,12 +16,12 @@ phases:
       - yarn --version
   build:
     commands:
-      - cd client
+      - cd $CODEBUILD_SRC_DIR/client
       - yarn install
       - yarn build
   post_build:
     commands:
-      - ls client/build
+      - ls $CODEBUILD_SRC_DIR/client/build
 artifacts:
   files:
     - 'client/build/*'
