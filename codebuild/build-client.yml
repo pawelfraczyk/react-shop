@@ -1,0 +1,27 @@
+version: 0.2
+
+# variables to use during the build
+env:
+  variables:
+    AWS_REGION: "eu-central-1"
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14.x
+    commands:
+      - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+      - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+      - apt update && apt install -y yarn
+      - yarn --version
+  build:
+    commands:
+      - cd client
+      - yarn install
+      - yarn build
+  post_build:
+    commands:
+      - ls client/build
+artifacts:
+  files:
+    - 'client/build/*'
