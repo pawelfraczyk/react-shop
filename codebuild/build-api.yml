@@ -10,6 +10,7 @@ phases:
     commands:
       - echo "Install stage"
   pre_build:
+    commands:
       - IMAGE_TAG="$CODEBUILD_BUILD_NUMBER-$(echo "$CODEBUILD_RESOLVED_SOURCE_VERSION" | cut -c 1-7)"
   build:
     commands:
