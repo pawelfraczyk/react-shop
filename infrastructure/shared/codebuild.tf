@@ -22,8 +22,8 @@ resource "aws_codebuild_project" "build_client" {
     image_pull_credentials_type = "CODEBUILD"
 
     environment_variable {
-      name  = "S3-BUCKET-NAME"
-      value = "cokolwiek"
+      name  = "ECR_CLIENT_URL"
+      value = aws_ecr_repository.client.repository_url
     }
   }
 
@@ -66,8 +66,8 @@ resource "aws_codebuild_project" "build_api" {
     image_pull_credentials_type = "CODEBUILD"
 
     environment_variable {
-      name  = "S3-BUCKET-NAME"
-      value = "cokolwiek"
+      name  = "ECR_API_URL"
+      value = aws_ecr_repository.api.repository_url
     }
   }
 
