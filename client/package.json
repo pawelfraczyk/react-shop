@@ -25,6 +25,7 @@
   "devDependencies": {
     "mocha": "^6.2.0"
   },
+  "proxy": "http://api:2370",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

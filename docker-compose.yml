@@ -1,0 +1,74 @@
+version: "3.9"
+
+x-env-aliases:
+  - &DEFAULT_BACKEND_ENVS
+    MONGO_USER: "${MONGO_USER:-sammy}"
+    MONGO_PASS: "${MONGO_PASS:-dummy}"
+    MONGO_CONN_STRING: "${MONGO_CONN_STRING:-mongo:27017?authSource=admin}"
+    MONGO_DB: "${MONGO_DB:-shop}"
+    JWT_SECRET: "${JWT_SECRET:-randomstring}"
+
+  - &DEFAULT_MONGO_ENVS
+    MONGO_INITDB_ROOT_USERNAME: "${MONGO_USER:-sammy}"
+    MONGO_INITDB_ROOT_PASSWORD: "${MONGO_PASS:-dummy}"
+
+  - &DEFAULT_MONGO_SEED_ENVS
+    MONGO_USER: "${MONGO_USER:-sammy}"
+    MONGO_PASS: "${MONGO_PASS:-dummy}"
+    MONGO_CONN_STRING: "${MONGO_CONN_STRING:-mongo:27017/shop?authSource=admin}"
+
+networks:
+  reactshop_net: {}
+
+services:
+  yarn:
+    container_name: yarn
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    entrypoint: yarn
+    command: start
+    networks:
+      reactshop_net:
+
+  api:
+    container_name: api
+    image: "api:${IMAGE_TAG:-latest}"
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "2370:2370"
+    environment:
+      <<: *DEFAULT_BACKEND_ENVS
+    entrypoint: yarn
+    command: start
+    networks:
+      reactshop_net:
+    depends_on:
+      - mongo
+      - mongo_seed
+
+  mongo:
+    container_name: mongo
+    image: mongo:5
+    restart: always
+    environment:
+      <<: *DEFAULT_MONGO_ENVS
+    ports:
+      - "27017:27017"
+    networks:
+      reactshop_net:
+
+
+  mongo_seed:
+    container_name: mongo_seed
+    build: mongo-seed/.
+    environment:
+      <<: *DEFAULT_MONGO_SEED_ENVS
+    networks:
+      reactshop_net:
+    depends_on:
+      - mongo
