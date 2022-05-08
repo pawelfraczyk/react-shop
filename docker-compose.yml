@@ -33,6 +33,7 @@ services:
     networks:
       reactshop_net:
 
+
   api:
     container_name: api
     image: "api:${IMAGE_TAG:-latest}"
@@ -72,3 +73,21 @@ services:
       reactshop_net:
     depends_on:
       - mongo
+
+  wait_for:
+    image: busybox:1.33.1
+    entrypoint: [ "sh", "-c" ]
+    command:
+      - |
+          END_TIME=$$(( $$( date +%s ) + 30))
+          while [ $$(date +%s) -lt $$END_TIME ]; do
+            if nc -zv ${HOST:-mongo} ${PORT:-27017}; then
+              exit 0;
+            fi
+            sleep 1
+            echo "Connecting to ${HOST:-mongo}.."
+          done
+          echo "Could not establish connection to ${HOST:-mongo}:${PORT:-27017}"
+          exit 1;
+    networks:
+      reactshop_net:
