@@ -14,7 +14,7 @@ module "vpc" {
   public_subnets   = ["10.0.3.0/24", "10.0.4.0/24", "10.0.5.0/24"]
   database_subnets = ["10.0.6.0/24", "10.0.7.0/24", "10.0.8.0/24"]
 
-  enable_nat_gateway   = false
+  enable_nat_gateway   = true
   single_nat_gateway   = true
   enable_dns_support   = true
   enable_dns_hostnames = true

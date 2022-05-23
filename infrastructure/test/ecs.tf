@@ -18,7 +18,7 @@ resource "aws_ecs_service" "backend" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.ecs_backend.arn
-    container_name   = "nginx"
+    container_name   = "api"
     container_port   = 80
   }
 
@@ -38,8 +38,8 @@ resource "aws_ecs_task_definition" "backend" {
   container_definitions    = <<TASK_DEFINITION
 [
   {
-    "name": "nginx",
-    "image": "nginx:latest",
+    "name": "api",
+    "image": "nginx",
     "cpu": 512,
     "memory": 1024,
     "essential": true,
