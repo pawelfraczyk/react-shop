@@ -18,25 +18,19 @@ resource "aws_s3_bucket_website_configuration" "frontend" {
     key = "index.html"
   }
 }
+data "aws_iam_policy_document" "s3_policy" {
+  statement {
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.frontend.arn}/*"]
 
-resource "aws_s3_bucket_policy" "allow_public_access" {
-  bucket = aws_s3_bucket.frontend.id
-  policy = data.aws_iam_policy_document.allow_public_access.json
+    principals {
+      type        = "AWS"
+      identifiers = [aws_cloudfront_origin_access_identity.frontend.iam_arn]
+    }
+  }
 }
 
-data "aws_iam_policy_document" "allow_public_access" {
-  statement {
-    principals {
-      type        = "*"
-      identifiers = ["*"]
-    }
-
-    actions = [
-      "s3:GetObject",
-    ]
-
-    resources = [
-      "${aws_s3_bucket.frontend.arn}/*",
-    ]
-  }
+resource "aws_s3_bucket_policy" "frontend" {
+  bucket = aws_s3_bucket.frontend.id
+  policy = data.aws_iam_policy_document.s3_policy.json
 }
