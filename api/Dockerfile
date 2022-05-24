@@ -1,4 +1,4 @@
-FROM node:14-slim
+FROM node:12-slim
 
 RUN apt update && \
     apt install -y wget && \
