@@ -12,7 +12,7 @@ resource "aws_ecs_service" "backend" {
   launch_type     = "FARGATE"
   cluster         = aws_ecs_cluster.backend.id
   task_definition = aws_ecs_task_definition.backend.arn
-  desired_count   = 2
+  desired_count   = 1
 
   load_balancer {
     target_group_arn = aws_lb_target_group.ecs_backend.arn
@@ -22,7 +22,7 @@ resource "aws_ecs_service" "backend" {
 
   network_configuration {
     subnets         = data.terraform_remote_state.shared_remote_state.outputs.aws_vpc_private_subnets
-    security_groups = [aws_security_group.backend_ecs.id]
+    security_groups = [aws_security_group.backend_ecs.id, aws_security_group.docdb.id]
   }
 
 }
@@ -38,10 +38,17 @@ resource "aws_ecs_task_definition" "backend" {
 [
   {
     "name": "api",
-    "image": "088302454178.dkr.ecr.eu-west-1.amazonaws.com/react-shop-shared-eu-west-1-api:latest",
+    "image": "088302454178.dkr.ecr.eu-west-1.amazonaws.com/react-shop-shared-eu-west-1-api:12-d4d11b6",
     "cpu": 512,
     "memory": 1024,
     "essential": true,
+    "environment": [
+      {"name": "MONGO_USER", "value": "sammy"},
+      {"name": "MONGO_PASS", "value": "barbut8chars"},
+      {"name": "MONGO_CONN_STRING", "value": "${local.stack_name}-docdb.cluster-chgpvrzxan4z.eu-west-1.docdb.amazonaws.com:27017/db?tls=true&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false"},
+      {"name": "MONGO_DB", "value": "db"},
+      {"name": "JWT_SECRET", "value": "grevev43fc23cwcsr"}
+    ],
     "portMappings": [
       {
         "containerPort": 2370,
