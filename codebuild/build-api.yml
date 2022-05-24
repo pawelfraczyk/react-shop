@@ -20,6 +20,9 @@ phases:
       - HOST=mongo PORT=27017 docker-compose run --rm wait_for
       - docker-compose up -d api
       - HOST=api PORT=2370 docker-compose run --rm wait_for
+      - echo "Testing"
+      - docker-compose down
+      - docker-compose push api
   post_build:
     commands:
       - docker images

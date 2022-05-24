@@ -39,7 +39,7 @@ resource "aws_lb_listener" "public_lb_https" {
 
 resource "aws_lb_target_group" "ecs_backend" {
   name        = "${local.stack_name}-ecs-tg"
-  port        = 80
+  port        = 2370
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = data.terraform_remote_state.shared_remote_state.outputs.aws_vpc_id
