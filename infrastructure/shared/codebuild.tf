@@ -33,6 +33,13 @@ resource "aws_codebuild_project" "build_client" {
     }
 
   }
+  vpc_config {
+    vpc_id = module.vpc.vpc_id
+
+    subnets = module.vpc.private_subnets
+
+    security_group_ids = [module.vpc.default_security_group_id]
+  }
 
   source {
     type            = "CODEPIPELINE"
@@ -76,6 +83,14 @@ resource "aws_codebuild_project" "build_api" {
       group_name = aws_cloudwatch_log_group.api_build.name
     }
 
+  }
+
+  vpc_config {
+    vpc_id = module.vpc.vpc_id
+
+    subnets = module.vpc.private_subnets
+
+    security_group_ids = [module.vpc.default_security_group_id]
   }
 
   source {
