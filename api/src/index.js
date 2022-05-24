@@ -54,7 +54,7 @@ const {
 
 mongodb.MongoClient.connect(`mongodb://${MONGO_USER}:${MONGO_PASS}@${MONGO_CONN_STRING}`,
   {
-  tlsCAFile: `rds-combined-ca-bundle.pem` //Specify the DocDB; cert
+  tlsCAFile: `${__dirname}/rds-combined-ca-bundle.pem` //Specify the DocDB; cert
   },
   (err, client) => {
     if (err)
