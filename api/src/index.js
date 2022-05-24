@@ -53,7 +53,7 @@ const {
 } = process.env;
 
 //Specify the Amazon DocumentDB cert
-var ca = [fs.readFileSync(__dirname + "/rds-combined-ca-bundle.pem")];
+var ca = [fs.readFileSync(__dirname + "/rds-combined-ca-bundle.pem", 'utf8')];
 
 mongodb.MongoClient.connect(`mongodb://${MONGO_USER}:${MONGO_PASS}@${MONGO_CONN_STRING}`,
   {
