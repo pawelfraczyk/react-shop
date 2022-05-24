@@ -9,5 +9,7 @@ RUN yarn install
 
 ADD . .
 
+RUN wget https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem -P src/
+
 ENTRYPOINT [ "yarn" ]
 CMD ["start"]

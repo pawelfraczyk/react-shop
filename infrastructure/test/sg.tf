@@ -51,3 +51,17 @@ resource "aws_security_group" "backend_ecs" {
     ipv6_cidr_blocks = ["::/0"]
   }
 }
+
+resource "aws_security_group" "docdb" {
+  name        = "${local.stack_name}-docdb"
+  description = "Allow mongo connectivity"
+  vpc_id      = data.terraform_remote_state.shared_remote_state.outputs.aws_vpc_id
+
+  ingress {
+    description = "Mongo"
+    from_port   = 27017
+    to_port     = 27017
+    protocol    = "tcp"
+    self        = true
+  }
+}
