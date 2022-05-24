@@ -38,14 +38,14 @@ resource "aws_ecs_task_definition" "backend" {
 [
   {
     "name": "api",
-    "image": "088302454178.dkr.ecr.eu-west-1.amazonaws.com/react-shop-shared-eu-west-1-api:12-d4d11b6",
+    "image": "${var.api_image}",
     "cpu": 512,
     "memory": 1024,
     "essential": true,
     "environment": [
       {"name": "MONGO_USER", "value": "sammy"},
       {"name": "MONGO_PASS", "value": "barbut8chars"},
-      {"name": "MONGO_CONN_STRING", "value": "${local.stack_name}-docdb.cluster-chgpvrzxan4z.eu-west-1.docdb.amazonaws.com:27017/db?tls=true&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false"},
+      {"name": "MONGO_CONN_STRING", "value": "${aws_docdb_cluster.docdb.endpoint}:27017/db?tls=true&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false"},
       {"name": "MONGO_DB", "value": "db"},
       {"name": "JWT_SECRET", "value": "grevev43fc23cwcsr"}
     ],

@@ -1,5 +1,9 @@
 FROM node:14-slim
 
+RUN apt update && \
+    apt install -y wget && \
+    apt clean
+
 WORKDIR /app
 
 ADD package.json .
