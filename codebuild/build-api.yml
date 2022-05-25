@@ -4,25 +4,35 @@ version: 0.2
 env:
   variables:
     AWS_REGION: "eu-west-1"
+    TERRAFORM_VERSION: 1.1.8
 
 phases:
   install:
     commands:
       - echo "Install stage"
+      - curl -q --location https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip --output terraform.zip
+      - unzip -o terraform.zip -d /usr/bin
   pre_build:
     commands:
       - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin 088302454178.dkr.ecr.$AWS_REGION.amazonaws.com
       - IMAGE_TAG="$CODEBUILD_BUILD_NUMBER-$(echo "$CODEBUILD_RESOLVED_SOURCE_VERSION" | cut -c 1-7)"
+      - env
   build:
     commands:
       - docker-compose build api
-      # - docker-compose up -d mongo
-      # - HOST=mongo PORT=27017 docker-compose run --rm wait_for
-      # - docker-compose up -d api
-      # - HOST=api PORT=2370 docker-compose run --rm wait_for
-      # - echo "Testing"
-      # - docker-compose down
+      - docker-compose up -d mongo
+      - HOST=mongo PORT=27017 docker-compose run --rm wait_for
+      - docker-compose up -d api
+      - HOST=api PORT=2370 docker-compose run --rm wait_for
+      - echo "Testing"
+      - docker-compose down
       - docker-compose push api
+      - export TF_VAR_api_image="$ECR_API_URL:$IMAGE_TAG"
+      - cd infrastructure/test
+      - terraform init
+      - terraform fmt -check
+      - terraform validate
+      - terraform apply -auto-approve
   post_build:
     commands:
       - docker images

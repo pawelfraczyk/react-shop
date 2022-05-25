@@ -24,6 +24,6 @@ variable "domain" {
 
 variable "api_image" {
   type        = string
-  default     = "088302454178.dkr.ecr.eu-west-1.amazonaws.com/react-shop-shared-eu-west-1-api:15-08c90e9"
+  default     = "088302454178.dkr.ecr.eu-west-1.amazonaws.com/react-shop-shared-eu-west-1-api:20-0f46dd6"
   description = "Name of ECR image for api"
 }
