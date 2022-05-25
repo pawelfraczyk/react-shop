@@ -44,7 +44,7 @@ resource "aws_ecs_task_definition" "backend" {
     "essential": true,
     "environment": [
       {"name": "MONGO_USER", "value": "sammy"},
-      {"name": "MONGO_PASS", "value": "barbut8chars"},
+      {"name": "MONGO_PASS", "value": "${random_password.docdb_password.result}"},
       {"name": "MONGO_CONN_STRING", "value": "${aws_docdb_cluster.docdb.endpoint}:27017/db?tls=true&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false"},
       {"name": "MONGO_DB", "value": "db"},
       {"name": "JWT_SECRET", "value": "grevev43fc23cwcsr"}
